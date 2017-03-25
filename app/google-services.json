@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "446817467588",
+    "firebase_url": "https://clashhackspic.firebaseio.com",
+    "project_id": "clashhackspic",
+    "storage_bucket": "clashhackspic.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:446817467588:android:7a7cbe41d9445321",
+        "android_client_info": {
+          "package_name": "clashacks.commandoengineer.clashhackspic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "446817467588-v6hg7lvqicqchkgpvgva500134t36br6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "clashacks.commandoengineer.clashhackspic",
+            "certificate_hash": "0821e6265ebfea04992b6a6fdc75106a644e1ec8"
+          }
+        },
+        {
+          "client_id": "446817467588-i89g25equ6jvn592386nrltatohu7878.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWI3Rcvk70yYg0ZtXMOUBv1mAhhLrl4I4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "446817467588-i89g25equ6jvn592386nrltatohu7878.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

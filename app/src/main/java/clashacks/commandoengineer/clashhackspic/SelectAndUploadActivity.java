@@ -1,8 +1,8 @@
 package clashacks.commandoengineer.clashhackspic;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringDef;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,19 +25,16 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
-public class SelectAndUploadActivity extends AppCompatActivity {
+public class SelectAndUploadActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = SelectAndUploadActivity.class.getSimpleName();
 
     private StorageReference mStorageReference;
-    private DatabaseReference myDbRef;
+    private DatabaseReference myDbRefUsers;
 
     private RecyclerView mRecyclerView;
     private MyAdapter mAdapter;
@@ -48,10 +45,12 @@ public class SelectAndUploadActivity extends AppCompatActivity {
         setContentView(R.layout.content_select_upload);
 
         mStorageReference = FirebaseStorage.getInstance().getReference();
-        myDbRef = FirebaseDatabase.getInstance().getReference("users");
+        myDbRefUsers = FirebaseDatabase.getInstance().getReference("users");
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        findViewById(R.id.button_upload).setOnClickListener(this);
+
         mRecyclerView.setLayoutManager(layoutManager);
 
         mAdapter = new MyAdapter();
@@ -62,7 +61,7 @@ public class SelectAndUploadActivity extends AppCompatActivity {
     private void setUsersList() {
         final ArrayList<String> arrayList = new ArrayList<>();
         Log.e(TAG, "setting arraylist");
-        myDbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        myDbRefUsers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.e(TAG, "Datasnapshot's size:" + dataSnapshot.getChildrenCount());
@@ -103,6 +102,27 @@ public class SelectAndUploadActivity extends AppCompatActivity {
                         Toast.makeText(SelectAndUploadActivity.this, "Upload Failed!", Toast.LENGTH_LONG).show();
                     }
                 });
+    }
+
+    @Override
+    public void onClick(View view) {
+        Intent intent = this.getIntent();
+        String filePath = intent.getStringExtra("FILE_PATH");
+        String fileName = intent.getStringExtra("FILE_NAME");
+
+//        if (fileName != null && filePath != null) {
+//            uploadFile(filePath, fileName);
+            addEntriesToSelectedUsers(fileName);
+//        }else{
+//            Log.e(TAG, "Filename " + fileName + "FilePath : " + filePath);
+//        }
+    }
+
+    public void addEntriesToSelectedUsers(String filename){
+        HashMap<String, String> checked = mAdapter.getCheckedItems();
+        for(HashMap.Entry<String, String> Entry : checked.entrySet()){
+            myDbRefUsers.child(Entry.getKey()).child("filename").setValue(0);
+        }
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {

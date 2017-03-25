@@ -111,7 +111,7 @@ public class SelectAndUploadActivity extends AppCompatActivity implements View.O
         String fileName = intent.getStringExtra("FILE_NAME");
 
 //        if (fileName != null && filePath != null) {
-//            uploadFile(filePath, fileName);
+            uploadFile(filePath, fileName);
             addEntriesToSelectedUsers(fileName);
 //        }else{
 //            Log.e(TAG, "Filename " + fileName + "FilePath : " + filePath);

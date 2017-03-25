@@ -23,9 +23,17 @@
             </intent-filter>
         </activity>
         <activity android:name=".SelectAndUploadActivity"
-            android:exported="true"></activity>
+            android:exported="true">
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="." />-->
+        </activity>
 
-        <activity android:name=".LibraryActivity"></activity>
+        <activity android:name=".LibraryActivity">
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="." />-->
+        </activity>
     </application>
 
 </manifest>

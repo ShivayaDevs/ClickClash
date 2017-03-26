@@ -17,8 +17,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     private void signInAnonymously() {
-        mAuth.signInAnonymously().addOnSuccessListener(this, new  OnSuccessListener<AuthResult>() {
+        mAuth.signInAnonymously().addOnSuccessListener(this, new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
                 // do your stuff
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,34 +63,47 @@ public class MainActivity extends AppCompatActivity {
         //getting shared preferences
 //        final SharedPreferences pref= getSharedPreferences("pref",MODE_PRIVATE);
         final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        String username = pref.getString("username","");
+        String username = pref.getString("username", "");
 //        Toast.makeText(this, username, Toast.LENGTH_SHORT).show();
-        if(!username.equals("") && !username.isEmpty()) {
+        if (!username.equals("") && !username.isEmpty()) {
             startActivity(new Intent(MainActivity.this, HomeActivity.class));
         }
 
-        mUsername = (EditText)findViewById(R.id.input_username);
-        mLogin = (Button)findViewById(R.id.bt_login);
+        mUsername = (EditText) findViewById(R.id.input_username);
+        mLogin = (Button) findViewById(R.id.bt_login);
 
         mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = mUsername.getText().toString();
+                final String username = mUsername.getText().toString();
 
-                if(username == ""){
-                        Toast.makeText(MainActivity.this, "Empty username!", Toast.LENGTH_SHORT).show();
-                }else{
+                if (username == "") {
+                    Toast.makeText(MainActivity.this, "Empty username!", Toast.LENGTH_SHORT).show();
+                } else {
                     //storing shared preferences
                     SharedPreferences.Editor editor = pref.edit();
-                    editor.putString("username",username);
+                    editor.putString("username", username);
                     editor.apply();
 
-                    myDbRefUsers.child(username).setValue(0);
+                    myDbRefUsers.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (!dataSnapshot.exists()) {
+                                myDbRefUsers.child(username).setValue(0);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                     startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                    finish();
                 }
 
-               // startActivity(new Intent(MainActivity.this, AddImage.class));
+                // startActivity(new Intent(MainActivity.this, AddImage.class));
             }
         });
     }

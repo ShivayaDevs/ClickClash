@@ -27,10 +27,10 @@
         <activity android:name=".SelectAndUploadActivity"
             android:exported="true"
             android:label="Tag friends"
-            android:parentActivityName=".CameraActivity">
+            android:parentActivityName=".HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".CameraActivity" />
+                android:value=".HomeActivity" />
         </activity>
 
         <activity android:name=".LibraryActivity"

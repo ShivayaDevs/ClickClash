@@ -37,15 +37,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String username = mUsername.getText().toString();
 
-                //storing shared preferences
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString("username",username);
-                editor.commit();
+                if(username == ""){
+                        Toast.makeText(MainActivity.this, "Empty username!", Toast.LENGTH_SHORT).show();
+                }else{
+                    //storing shared preferences
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString("username",username);
+                    editor.apply();
 
-                //TODO: validate username and login button
+                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                }
 
-
-                //TODO: change the intent to add image activity by vagisha
                // startActivity(new Intent(MainActivity.this, AddImage.class));
             }
         });

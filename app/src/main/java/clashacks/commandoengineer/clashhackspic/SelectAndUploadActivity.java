@@ -1,7 +1,9 @@
 package clashacks.commandoengineer.clashhackspic;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.prefs.PreferenceChangeEvent;
 
 public class SelectAndUploadActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = SelectAndUploadActivity.class.getSimpleName();
@@ -39,6 +42,7 @@ public class SelectAndUploadActivity extends AppCompatActivity implements View.O
     private RecyclerView mRecyclerView;
     private MyAdapter mAdapter;
 
+    private String myUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +60,9 @@ public class SelectAndUploadActivity extends AppCompatActivity implements View.O
         mAdapter = new MyAdapter();
         mRecyclerView.setAdapter(mAdapter);
         setUsersList();
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String myUser = prefs.getString("username", "0");
     }
 
     private void setUsersList() {
@@ -82,7 +89,7 @@ public class SelectAndUploadActivity extends AppCompatActivity implements View.O
     }
 
     // UPLOAD function
-    private void uploadFile(String filePath, String fileName) {
+    private void uploadFile(final String filePath, String fileName) {
         Uri file = Uri.fromFile(new File(filePath));
         StorageReference riversRef = mStorageReference.child("images/" + fileName);
         //TODO: Show a progress bar
@@ -93,6 +100,12 @@ public class SelectAndUploadActivity extends AppCompatActivity implements View.O
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // Get a URL to the uploaded content
                         Log.e(TAG, "Uploaded.");
+
+                        //TODO: no benefit of deleting
+                        HashMap<String, String> checked = mAdapter.getCheckedItems();
+                        if(!checked.containsKey(myUser)){
+                            Log.e(TAG, "isFileDeleted: " + new File(filePath).delete());
+                        }
 //                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
                     }
                 })
@@ -110,18 +123,25 @@ public class SelectAndUploadActivity extends AppCompatActivity implements View.O
         String filePath = intent.getStringExtra("FILE_PATH");
         String fileName = intent.getStringExtra("FILE_NAME");
 
-//        if (fileName != null && filePath != null) {
+        if (fileName != null && filePath != null) {
+            fileName = fileName.substring(0,fileName.length()-4);
             uploadFile(filePath, fileName);
-            addEntriesToSelectedUsers(fileName);
-//        }else{
-//            Log.e(TAG, "Filename " + fileName + "FilePath : " + filePath);
-//        }
+            addEntriesToSelectedUsers(filePath, fileName);
+        }else{
+            Log.e(TAG, "Filename " + fileName + "FilePath : " + filePath);
+        }
     }
 
-    public void addEntriesToSelectedUsers(String filename){
+    public void addEntriesToSelectedUsers(String filepath, String filename){
+
         HashMap<String, String> checked = mAdapter.getCheckedItems();
         for(HashMap.Entry<String, String> Entry : checked.entrySet()){
-            myDbRefUsers.child(Entry.getKey()).child("filename").setValue(0);
+            String user = Entry.getKey();
+            if(myUser != user){
+                myDbRefUsers.child(user).child(filename).setValue(0);
+            } else {//TODO: check this
+                myDbRefUsers.child(user).child(filename).setValue(0);
+            }
         }
     }
 

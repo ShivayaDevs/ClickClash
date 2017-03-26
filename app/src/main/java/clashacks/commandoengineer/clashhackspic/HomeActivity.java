@@ -19,7 +19,6 @@ public class HomeActivity extends AppCompatActivity {
         buttonCamera = (Button)findViewById(R.id.captureButton);
         buttonGallery = (Button) findViewById(R.id.galleryButton);
 
-
         buttonCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

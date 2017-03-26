@@ -65,7 +65,7 @@ public class CameraActivity extends AppCompatActivity {
         }
         try {
             FileOutputStream fos = new FileOutputStream(pictureFile);
-            image.compress(Bitmap.CompressFormat.PNG, 90, fos);
+            image.compress(Bitmap.CompressFormat.PNG,100, fos);
             fos.close();
             return pictureFile;
         } catch (FileNotFoundException e) {

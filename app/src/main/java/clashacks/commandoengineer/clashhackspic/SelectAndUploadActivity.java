@@ -27,7 +27,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +48,7 @@ public class SelectAndUploadActivity extends AppCompatActivity implements View.O
     private MyAdapter mAdapter;
 
     private String myUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,9 +95,47 @@ public class SelectAndUploadActivity extends AppCompatActivity implements View.O
     }
 
     // UPLOAD function
-    private void uploadFile(final String filePath, String fileName) {
+    private void uploadFile(final String filePath, final String fileName) {
+
+        FirebaseStorage mStorage = FirebaseStorage.getInstance();
+        StorageReference mCallLogsReference = mStorage.getReferenceFromUrl("gs://clashhackspic.appspot.com")
+                .child("images");
+        StorageReference mFileReference = mCallLogsReference.child(fileName);
+        File file = new File(filePath);
+        int size = (int) file.length();
+        byte[] bytes = new byte[size];
+
+        try {
+            BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
+            buf.read(bytes, 0, bytes.length);
+            buf.close();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+
+        UploadTask uploadTask = mFileReference.putBytes(bytes);
+//        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                Uri downloadUri = taskSnapshot.getDownloadUrl();
+//            }
+//        });
+//
+
+//        mFileReference.putBytes(bytes);
+
+
+
+/*
+
+
         Uri file = Uri.fromFile(new File(filePath));
-        StorageReference riversRef = mStorageReference.child("images/" + fileName);
+        final StorageReference riversRef = mStorageReference.child("images/" + fileName);
         //TODO: Show a progress bar
         Log.e(TAG, "Uploading...");
         riversRef.putFile(file)
@@ -106,7 +150,16 @@ public class SelectAndUploadActivity extends AppCompatActivity implements View.O
                         if(!checked.containsKey(myUser)){
                             Log.e(TAG, "isFileDeleted: " + new File(filePath).delete());
                         }
+
+                        riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Log.e(TAG,"URI " + uri.toString()) ;
+                            }
+                        });
+
 //                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+//                        Log.e(TAG, downloadUrl.toString());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -114,7 +167,7 @@ public class SelectAndUploadActivity extends AppCompatActivity implements View.O
                     public void onFailure(@NonNull Exception exception) {
                         Toast.makeText(SelectAndUploadActivity.this, "Upload Failed!", Toast.LENGTH_LONG).show();
                     }
-                });
+                });*/
     }
 
     @Override
@@ -126,7 +179,6 @@ public class SelectAndUploadActivity extends AppCompatActivity implements View.O
         if (fileName != null && filePath != null) {
             fileName = fileName.substring(0,fileName.length()-4);
             uploadFile(filePath, fileName);
-            addEntriesToSelectedUsers(filePath, fileName);
         }else{
             Log.e(TAG, "Filename " + fileName + "FilePath : " + filePath);
         }

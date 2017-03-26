@@ -92,7 +92,11 @@ public class LibraryActivity extends AppCompatActivity {
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
                 for(Map.Entry<String, Object> Entry: map.entrySet()) {
                     imageNameList.add(Entry.getKey());
-                   StorageReference imageRef = mStorageReference.child("images/" + Entry.getKey());
+                    StorageReference imageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://clashhackspic.appspot.com/images/" + Entry.getKey());
+//                   StorageReference imageRef = mStorageReference.child("images/" + Entry.getKey());
+//                    Task<Uri> uri = imageRef.getDownloadUrl();
+//                    Log.e(TAG, "");
+//                    Log.e(TAG,"" + uri.getResult());
                     Log.e(TAG, "started");
                    imageRef.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                        @Override

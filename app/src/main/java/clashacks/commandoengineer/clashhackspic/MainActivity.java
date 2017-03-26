@@ -9,24 +9,29 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class MainActivity extends AppCompatActivity {
 
     EditText mUsername;
     Button mLogin;
+    private DatabaseReference myDbRefUsers;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        myDbRefUsers = FirebaseDatabase.getInstance().getReference("users");
+
         //getting shared preferences
         final SharedPreferences pref= getSharedPreferences("pref",MODE_PRIVATE);
         String username = pref.getString("username","");
-        Toast.makeText(this, username, Toast.LENGTH_SHORT).show();
-        if(!username.equals("") && !username.isEmpty())
-        {
-            //TODO
-            //startActivity(new Intent(MainActivity.this, AddImageActivity.class));
+//        Toast.makeText(this, username, Toast.LENGTH_SHORT).show();
+        if(!username.equals("") && !username.isEmpty()) {
+            startActivity(new Intent(MainActivity.this, HomeActivity.class));
         }
 
         mUsername = (EditText)findViewById(R.id.input_username);
@@ -44,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = pref.edit();
                     editor.putString("username",username);
                     editor.apply();
+
+                    myDbRefUsers.child(username).setValue(0);
 
                     startActivity(new Intent(MainActivity.this, HomeActivity.class));
                 }

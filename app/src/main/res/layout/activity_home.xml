@@ -1,26 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="clashacks.commandoengineer.clashhackspic.HomeActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageButton
-        android:id="@+id/captureButton"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_photo_camera_1"
-        android:layout_margin="8dp"/>
+        app:elevation="0dp">
 
-    <ImageButton
-        android:id="@+id/galleryButton"
-        android:layout_width="match_parent"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize">
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/activity_library"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_picture"
-        android:layout_margin="8dp"/>
+        android:layout_gravity="bottom|end"
+        app:fabSize="normal"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_camera_alt_white_24dp" />
 
-
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

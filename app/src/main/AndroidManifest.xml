@@ -44,7 +44,8 @@
             android:exported="true"></activity>
 
         <activity android:name=".HomeActivity"
-            android:label="ClickClash"></activity>
+            android:label="ClickClash"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
     </application>
 

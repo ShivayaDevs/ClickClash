@@ -32,7 +32,7 @@ public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.ViewHold
     List<String> mImageList;
     StorageReference mStorageRef;
 
-    public LibraryAdapter(Context context/*, List<String> imageUrls*/)
+    public LibraryAdapter(Context context)
     {
         this.context = context;
         mImageList = new ArrayList<String>();
@@ -57,10 +57,6 @@ public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(LibraryAdapter.ViewHolder holder, int position) {
-//        StorageReference pathReference = mStorageRef.child("images/" + mImageList.get(position));
-//        Glide.with(context) .using(new FirebaseImageLoader())
-//                .load(pathReference)
-//                .into(holder.mImageView);
         byte[] bytes = Base64.decode(mImageList.get(position),Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         holder.mImageView.setImageBitmap(decodedByte);

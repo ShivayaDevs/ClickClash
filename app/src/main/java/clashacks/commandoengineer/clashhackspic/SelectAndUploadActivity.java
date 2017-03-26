@@ -2,6 +2,8 @@ package clashacks.commandoengineer.clashhackspic;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -9,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +31,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -177,23 +181,32 @@ public class SelectAndUploadActivity extends AppCompatActivity implements View.O
         String fileName = intent.getStringExtra("FILE_NAME");
 
         if (fileName != null && filePath != null) {
-            fileName = fileName.substring(0,fileName.length()-4);
-            uploadFile(filePath, fileName);
-        }else{
+            fileName = fileName.substring(0, fileName.length() - 4);
+            addEntriesToSelectedUsers(filePath, fileName);
+//            uploadFile(filePath, fileName);
+        } else {
             Log.e(TAG, "Filename " + fileName + "FilePath : " + filePath);
         }
     }
 
-    public void addEntriesToSelectedUsers(String filepath, String filename){
+    public void addEntriesToSelectedUsers(String filepath, String filename) {
+
+        Bitmap bm = BitmapFactory.decodeFile(filepath);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+        byte[] b = baos.toByteArray();
+
+        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+
 
         HashMap<String, String> checked = mAdapter.getCheckedItems();
-        for(HashMap.Entry<String, String> Entry : checked.entrySet()){
+        for (HashMap.Entry<String, String> Entry : checked.entrySet()) {
             String user = Entry.getKey();
-            if(myUser != user){
-                myDbRefUsers.child(user).child(filename).setValue(0);
-            } else {//TODO: check this
-                myDbRefUsers.child(user).child(filename).setValue(0);
-            }
+//            if(myUser != user){
+            myDbRefUsers.child(user).child(filename).setValue(encodedImage);
+//            } else {//TODO: check this
+//                myDbRefUsers.child(user).child(filename).setValue(0);
+//            }
         }
     }
 

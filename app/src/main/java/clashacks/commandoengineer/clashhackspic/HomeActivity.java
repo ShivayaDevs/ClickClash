@@ -5,19 +5,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 public class HomeActivity extends AppCompatActivity {
 
-    Button buttonGallery;
-    Button buttonCamera;
+    ImageButton buttonCamera, buttonGallery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-        buttonCamera = (Button)findViewById(R.id.captureButton);
-        buttonGallery = (Button) findViewById(R.id.galleryButton);
+        buttonCamera = (ImageButton) findViewById(R.id.captureButton);
+        buttonGallery = (ImageButton) findViewById(R.id.galleryButton);
 
         buttonCamera.setOnClickListener(new View.OnClickListener() {
             @Override

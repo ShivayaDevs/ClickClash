@@ -47,13 +47,12 @@ public class CameraActivity extends AppCompatActivity {
             File file = storeImage(imageBitmap);
 
             Log.i(TAG,file.getPath()+mImageName);
-//            textView.setText(file.getPath()+"path");
 
             Intent i = new Intent(this, SelectAndUploadActivity.class);
             i.putExtra("FILE_PATH",file.getPath());
             i.putExtra("FILE_NAME", mImageName);
             startActivity(i);
-
+            finish();
         }
     }
 
@@ -65,7 +64,7 @@ public class CameraActivity extends AppCompatActivity {
         }
         try {
             FileOutputStream fos = new FileOutputStream(pictureFile);
-            image.compress(Bitmap.CompressFormat.PNG,100, fos);
+            image.compress(Bitmap.CompressFormat.JPEG,100, fos);
             fos.close();
             return pictureFile;
         } catch (FileNotFoundException e) {

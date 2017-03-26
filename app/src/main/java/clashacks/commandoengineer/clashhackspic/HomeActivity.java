@@ -215,8 +215,8 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(new Intent(this, MainActivity.class));
         }
         else if(item.getItemId() == R.id.action_upload) {
-//            Intent intent = new Intent(HomeActivity.this, );
-//            startActivity(intent);
+            Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+            startActivity(intent);
         }
         return true;
     }

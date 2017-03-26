@@ -37,10 +37,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.prefs.PreferenceChangeEvent;
+import com.kairos.*;
+
+import org.json.JSONException;
 
 public class SelectAndUploadActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = SelectAndUploadActivity.class.getSimpleName();
@@ -72,8 +76,54 @@ public class SelectAndUploadActivity extends AppCompatActivity implements View.O
         setUsersList();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String myUser = prefs.getString("username", "0");
+        String myUser = prefs.getString("username", "");
     }
+
+    private void setCheckBoxes(){
+        String filepath = this.getIntent().getStringExtra("FILE_PATH");
+        Bitmap bm = BitmapFactory.decodeFile(filepath);
+
+        Kairos myKairos;
+        KairosListener listener;
+        String subjectId;
+        String galleryId;
+
+        myKairos = new Kairos();
+        // set authentication
+        String app_id = "7ea73387";
+        String api_key = "b653c6dc6b0356497dd2aa8197e6a21d";
+        myKairos.setAuthentication(this, app_id, api_key);
+        galleryId = "friends";
+
+        listener = new KairosListener() {
+            @Override
+            public void onSuccess(String s) {
+
+                Log.d("KAIROS", "success : "+ s );
+
+
+
+
+            }
+
+            @Override
+            public void onFail(String s) {
+                Log.d(TAG, "FAil : "+ s );
+
+            }
+        };
+
+        try {
+            myKairos.recognize(bm, galleryId, null,null,null,null, listener);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 
     private void setUsersList() {
         final ArrayList<String> arrayList = new ArrayList<>();

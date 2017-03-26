@@ -1,9 +1,12 @@
 package clashacks.commandoengineer.clashhackspic;
 
+import android.*;
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -60,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
             signInAnonymously();
         }
 
+        requestPermissions();
+
+
         //getting shared preferences
 //        final SharedPreferences pref= getSharedPreferences("pref",MODE_PRIVATE);
         final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -106,5 +112,13 @@ public class MainActivity extends AppCompatActivity {
                 // startActivity(new Intent(MainActivity.this, AddImage.class));
             }
         });
+    }
+
+    public void requestPermissions(){
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
+        }, 1);
     }
 }

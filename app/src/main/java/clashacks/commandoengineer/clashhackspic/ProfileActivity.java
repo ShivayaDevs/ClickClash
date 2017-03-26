@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.kairos.*;
 
@@ -70,6 +72,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         subjectId = prefs.getString("username", "");
+        TextView textView = (TextView) findViewById(R.id.textView);
+        textView.setText(subjectId);
+
+
 
         imgButton2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +114,18 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-
+        findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                }, 2000);
+            }
+        });
     }
 
 //    @Override

@@ -89,6 +89,7 @@ public class SelectAndUploadActivity extends AppCompatActivity implements View.O
                     Log.e(TAG, "looped..." + arrayList.size());
                 }
                 mAdapter.setData(arrayList);
+                findViewById(R.id.pbar).setVisibility(View.GONE);
             }
 
             @Override
@@ -182,7 +183,9 @@ public class SelectAndUploadActivity extends AppCompatActivity implements View.O
 
         if (fileName != null && filePath != null) {
             fileName = fileName.substring(0, fileName.length() - 4);
+            findViewById(R.id.pbar).setVisibility(View.VISIBLE);
             addEntriesToSelectedUsers(filePath, fileName);
+            mRecyclerView.setVisibility(View.GONE);
 //            uploadFile(filePath, fileName);
         } else {
             Log.e(TAG, "Filename " + fileName + "FilePath : " + filePath);
@@ -203,8 +206,14 @@ public class SelectAndUploadActivity extends AppCompatActivity implements View.O
         for (HashMap.Entry<String, String> Entry : checked.entrySet()) {
             String user = Entry.getKey();
 //            if(myUser != user){
-            myDbRefUsers.child(user).child(filename).setValue(encodedImage);
-//            } else {//TODO: check this
+            myDbRefUsers.child(user).child(filename).setValue(encodedImage)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                              @Override
+                                              public void onSuccess(Void aVoid) {
+                                                finish();
+                                              }
+                                          });
+//            } else {
 //                myDbRefUsers.child(user).child(filename).setValue(0);
 //            }
         }

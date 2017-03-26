@@ -214,4 +214,9 @@ public class HomeActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    protected void onRestart() {
+        downloadUserImages();
+        super.onRestart();
+    }
 }

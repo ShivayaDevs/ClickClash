@@ -2,6 +2,7 @@ package clashacks.commandoengineer.clashhackspic;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
         myDbRefUsers = FirebaseDatabase.getInstance().getReference("users");
 
         //getting shared preferences
-        final SharedPreferences pref= getSharedPreferences("pref",MODE_PRIVATE);
+//        final SharedPreferences pref= getSharedPreferences("pref",MODE_PRIVATE);
+        final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         String username = pref.getString("username","");
 //        Toast.makeText(this, username, Toast.LENGTH_SHORT).show();
         if(!username.equals("") && !username.isEmpty()) {

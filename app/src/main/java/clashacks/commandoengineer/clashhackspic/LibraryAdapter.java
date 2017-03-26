@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,8 +28,7 @@ public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.ViewHold
     public LibraryAdapter(Context context, List<String> imageUrls)
     {
         this.context = context;
-        mImageUrls = imageUrls;
-
+        mImageUrls = new ArrayList<String>();
     }
 
 
@@ -38,7 +38,6 @@ public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.ViewHold
         public ViewHolder(View itemView) {
             super(itemView);
             mImageView = (ImageView) itemView.findViewById(R.id.imageView);
-
         }
     }
 
@@ -50,9 +49,7 @@ public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(LibraryAdapter.ViewHolder holder, int position) {
-    //Todo change this
         Glide.with(context).load(mImageUrls.get(position)).into(holder.mImageView);
-
     }
 
     @Override
@@ -60,6 +57,11 @@ public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.ViewHold
 
         //todo change this
         return mImageUrls.size();
+    }
+
+    public void addImage(String urlString){
+        mImageUrls.add(urlString);
+        notifyDataSetChanged();
     }
 
 

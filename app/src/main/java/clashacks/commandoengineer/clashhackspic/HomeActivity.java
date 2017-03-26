@@ -3,6 +3,7 @@ package clashacks.commandoengineer.clashhackspic;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -19,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,6 +43,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private static final String TAG = "LibraryActivity";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int IMAGE_PICK_CODE = 2;
 
     RecyclerView mRecyclerView;
     DatabaseReference mDbReference;
@@ -210,6 +213,10 @@ public class HomeActivity extends AppCompatActivity {
             ed.putString("username", "");
             ed.commit();
             startActivity(new Intent(this, MainActivity.class));
+        }
+        else if(item.getItemId() == R.id.action_upload) {
+            Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+            startActivity(intent);
         }
         return true;
     }

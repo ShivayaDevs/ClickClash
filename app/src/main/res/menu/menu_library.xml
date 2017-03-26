@@ -3,4 +3,8 @@
     <item android:title="Log Out"
         android:orderInCategory="100"
         android:id="@+id/action_logout"/>
+
+    <item android:title="Upload Photos"
+        android:orderInCategory="100"
+        android:id="@+id/action_upload"/>
 </menu>

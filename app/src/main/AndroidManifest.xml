@@ -25,8 +25,10 @@
             android:name=".SelectAndUploadActivity"
             android:exported="true" />
         <activity android:name=".LibraryActivity" />
-        <activity android:name=".CameraActivity"
-            android:exported="true"></activity>
+        <activity
+            android:name=".CameraActivity"
+            android:exported="true" />
+        <activity android:name=".HomeActivity"></activity>
     </application>
 
 </manifest>

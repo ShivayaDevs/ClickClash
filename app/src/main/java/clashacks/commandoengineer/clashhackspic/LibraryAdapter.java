@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,12 +26,14 @@ import java.util.List;
 public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.ViewHolder> {
 
     Context context;
-    List<String> mImageUrls;
+    List<String> mImageList;
+    StorageReference mStorageRef;
 
-    public LibraryAdapter(Context context, List<String> imageUrls)
+    public LibraryAdapter(Context context/*, List<String> imageUrls*/)
     {
         this.context = context;
-        mImageUrls = new ArrayList<String>();
+        mImageList = new ArrayList<String>();
+        mStorageRef = FirebaseStorage.getInstance().getReference();
     }
 
 
@@ -49,18 +54,19 @@ public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(LibraryAdapter.ViewHolder holder, int position) {
-        Glide.with(context).load(mImageUrls.get(position)).into(holder.mImageView);
+        StorageReference pathReference = mStorageRef.child("images/" + mImageList.get(position));
+        Glide.with(context) .using(new FirebaseImageLoader())
+                .load(pathReference)
+                .into(holder.mImageView);
     }
 
     @Override
     public int getItemCount() {
-
-        //todo change this
-        return mImageUrls.size();
+        return mImageList.size();
     }
 
-    public void addImage(String urlString){
-        mImageUrls.add(urlString);
+    public void setImageList(ArrayList<String> list) {
+        mImageList = list;
         notifyDataSetChanged();
     }
 

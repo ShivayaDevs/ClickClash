@@ -63,9 +63,8 @@ public class LibraryActivity extends AppCompatActivity {
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         user  = prefs.getString("username", "");
-        Log.e(TAG, "user:" + user);
 
-        List<String> imageUrls = new ArrayList<String>();
+        /*List<String> imageUrls = new ArrayList<String>();
         String completePath = Environment.getExternalStorageDirectory() + "/ClashHacksPic/";
         File dir = new File(completePath);
         File[] files = dir.listFiles();
@@ -73,14 +72,58 @@ public class LibraryActivity extends AppCompatActivity {
             File file = files[i];
             Uri imageUri = Uri.fromFile(file);
             imageUrls.add(imageUri.toString());
-        }
+        }*/
 
-        adapter = new LibraryAdapter(this, imageUrls);
+        adapter = new LibraryAdapter(this);
         mRecyclerView.setAdapter(adapter);
 
         downloadUserImages();
 
     }
+
+    private void downloadUserImages(){
+        Log.e(TAG, "username"+ user);
+        DatabaseReference mPathReference = mDbReference.child(user);
+        mPathReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<String> imageNameList = new ArrayList<String>();
+                Log.e(TAG, dataSnapshot.toString());
+                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                for(Map.Entry<String, Object> Entry: map.entrySet()){
+                    imageNameList.add(Entry.getKey());
+                }
+                adapter.setImageList(imageNameList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "datasnapshot cancelled");
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_library, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_logout){
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor ed = prefs.edit();
+            ed.putString("username", "");
+            ed.commit();
+            startActivity(new Intent(LibraryActivity.this, MainActivity.class));
+            finish();
+        }
+        return true;
+    }
+}
+
+/*
 
     private void downloadUserImages(){
 
@@ -91,10 +134,8 @@ public class LibraryActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.e(TAG, dataSnapshot.toString());
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-//                Log.e(TAG, "a" + map.toString());
                 for(Map.Entry<String, Object> Entry: map.entrySet()){
                     if(!Entry.getValue().toString().equals("1")){ // Not downloaded already
-//                        Log.e(TAG, "Download:"+Entry.getKey());
                         try {
                             downloadImage(Entry.getKey());
                         } catch (IOException e) {
@@ -145,23 +186,4 @@ public class LibraryActivity extends AppCompatActivity {
 //        });
 
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_library, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_logout){
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor ed = prefs.edit();
-            ed.putString("username", "");
-            ed.commit();
-            startActivity(new Intent(LibraryActivity.this, MainActivity.class));
-            finish();
-        }
-        return true;
-    }
-}
+*/

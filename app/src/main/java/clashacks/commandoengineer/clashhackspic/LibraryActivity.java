@@ -90,8 +90,16 @@ public class LibraryActivity extends AppCompatActivity {
                 ArrayList<String> imageNameList = new ArrayList<String>();
                 Log.e(TAG, dataSnapshot.toString());
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                for(Map.Entry<String, Object> Entry: map.entrySet()){
+                for(Map.Entry<String, Object> Entry: map.entrySet()) {
                     imageNameList.add(Entry.getKey());
+                   StorageReference imageRef = mStorageReference.child("images/" + Entry.getKey());
+                    Log.e(TAG, "started");
+                   imageRef.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                       @Override
+                       public void onSuccess(byte[] bytes) {
+                           Log.e(TAG, "Successfully downloaded bytes.");
+                       }
+                   });
                 }
                 adapter.setImageList(imageNameList);
             }
